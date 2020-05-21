@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+    <script>
+        function showList(address) {
+            document.getElementById("listaPost").innerHTML = "";
+
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {  // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.onreadystatechange = function () {
+
+                if (this.readyState === 4 && this.status === 200) {
+                    visualJson(this.responseText);
+
+                } else
+                    document.getElementById("listaPost").innerHTML = "Loading...";
+
+            }
+            xmlhttp.open("GET", address, true);
+            xmlhttp.send();
+        }
+
+        function visualJson(json) {
+            document.getElementById("listaPost").innerHTML = json;
+            var parsedJson = JSON.parse(json);
+            var post = " <div class='d-flex justify-content-center align-items-center login-container row-cols-3'>";
+            for (i = 0; i < parsedJson.length; i++) {
+                post += "<div class='login-form text-center row-cols-3'>" + "<h1 class='mb-5 font-weight-light text-uppercase'>" +
+                        parsedJson[i].titolo + "</h1><p class='mt-3 font-weight-normal'>" +
+                        parsedJson[i].utente.username + "</p><p class='mt-3 font-weight-normal'>" +
+                        parsedJson[i].dataOra + "</p><p class='mt-3 font-weight-normal'>" +
+                        parsedJson[i].testo + "</p> </div>";
+            }
+            post += "</div>";
+            document.getElementById("listaPost").innerHTML = post;
+        }
+
+        function postId() {
+            var id = document.getElementById("PostId").value;
+            document.getElementById("listaPost").innerHTML = "";
+
+            xhr = new XMLHttpRequest();
+            var url = "http://localhost:8080/Microblog/rest/posts/" + id;
+
+            xmlhttp.onreadystatechange = function () {
+
+            
+                if (this.readyState === 4 && this.status === 200) {
+                    visualJsonId(this.responseText);
+
+                } else
+                    document.getElementById("postId").innerHTML = "Loading...";
+            }
+            
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+            
+        }
+        
+        function visualJsonId(jsonPost) {
+            
+            document.getElementById("postId").innerHTML = jsonPost;
+            var parsedJson = JSON.parse(jsonPost);
+            var post = " <div class='d-flex justify-content-center align-items-center login-container row-cols-3'>";
+            post += "<div class='login-form text-center row-cols-3'>" + "<h1 class='mb-5 font-weight-light text-uppercase'>" +
+                    parsedJson.titolo + "</h1><p class='mt-3 font-weight-normal'>" +
+                    parsedJson.utente.username + "</p><p class='mt-3 font-weight-normal'>" +
+                    parsedJson.dataOra + "</p><p class='mt-3 font-weight-normal'>" +
+                    parsedJson.testo + "</p> </div>";
+            post += "</div>";
+            document.getElementById("postId").innerHTML = post;
+        }
+
+    </script>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="css/style.css">
+        <title>PostList</title>
+    </head>
+
+    <body onload="showList('http://localhost:8080/Microblog/rest/posts');">
+        <div class="titolo text-center mb-5 font-weight-light text-uppercase">
+            <h1>Microblog Posts</h1>
+            <button type="submit" class="btn mt-5 rounded-pill btn-custom-due text-uppercase"
+                    onclick="location.href = 'newPost.html'">Create a
+                new
+                post</button></br>
+            <input type="text" class="input rounded-pill" name="ID"  id="PostId">
+            <button class="btn rounded-pill btn-custom-tre text-uppercase"
+                    onClick="postId()"> Cerca </button>
+        </div>
+
+        <div id="listaPost">
+        </div>
+
+        <div id="postId">
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
